@@ -59,7 +59,7 @@ yearly_diff <- f1 %>%
 yearly_diff$Car %>% unique()
 yearly_diff %>% 
   filter(grepl("^Red Bull", Car)) %>%
-  group_by(year) %>% 
+  group_by(year, Car) %>% 
   summarise(diff = mean(diff)) %>% 
   # filter(year > 2014) %>% 
   ggplot(aes(factor(year), diff)) +
@@ -68,7 +68,8 @@ yearly_diff %>%
   labs(title = "Difference between average race finish \nfor fist and second driver",
        x = "", y = "") +
   theme_minimal() +
-  theme(plot.margin = margin(0.2, 1, 0.2, 0.2, unit = "cm"))
+  theme(plot.margin = margin(0.2, 1, 0.2, 0.2, unit = "cm")) #+
+  # facet_wrap(~Car)
   
 
 
