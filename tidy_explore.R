@@ -125,6 +125,42 @@ f1_2021 %>%
   arrange(result_sd)
 
 
+### recipes
+f1_rec <- recipe(winner ~ cum_points + quali_result + fp3_result + fp2_result + fp1_result + fp3_laps , f1_train) %>% 
+  step_normalize(all_numeric_predictors())
+
+f1_wkflw <- workflow() %>% 
+  add_model(logistic_reg()) %>%
+  # add_model(svm_poly()) %>% 
+  add_recipe(f1_rec)
+
+
+f1_fit <- fit(f1_wkflw, f1_train)
+
+
+pred <- f1_fit %>% 
+  predict(new_data = f1_test, type = "class")
+
+results <- f1_test %>% 
+  # select(winner, cum_points) %>% 
+  bind_cols(pred)
+
+results %>% 
+  conf_mat(winner, .pred_class) %>% 
+  autoplot(type = "heatmap")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
